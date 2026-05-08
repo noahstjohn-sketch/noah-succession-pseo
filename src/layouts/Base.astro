@@ -1,0 +1,48 @@
+---
+// src/layouts/Base.astro
+// Authorized changes only: faqSchema JSON-LD, overflow-x:hidden on html+body, Person JSON-LD.
+// Button CSS lives in PageTemplate.astro and index.astro (scoped), NOT here.
+const { title, description, canonical, faqSchema } = Astro.props;
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Dr. Noah St. John',
+  alternateName: 'Noah St. John',
+  jobTitle: 'Neural Performance Architect',
+  description: "Dr. Noah St. John is the Neural Performance Architect and the world's leading authority on releasing the Invisible Brake for founders and family-business owners. 28 years, 27 books, over $3 billion in client results.",
+  url: 'https://noahstjohn.com',
+  sameAs: [
+    'https://noahstjohn.com',
+    'https://booknoah.com',
+  ],
+  knowsAbout: [
+    'Neural Performance Architecture',
+    'The Invisible Brake',
+    'Succession Coaching'
+  ],
+};
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  {canonical && <link rel="canonical" href={canonical} />}
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+  <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+  {faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+  <style is:global>
+    /* Mobile horizontal scroll guard (must be on BOTH html and body) */
+    html, body { overflow-x: hidden; }
+  </style>
+</head>
+<body>
+  <slot />
+</body>
+</html>

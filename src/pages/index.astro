@@ -1,0 +1,287 @@
+---
+import Base from '../layouts/Base.astro';
+import { topics, longtailTopics } from '../data/topics-helpers.js';
+import { niches, nicheCategories } from '../data/niches.js';
+
+const title = 'Succession Coaching | Dr. Noah St. John | Neural Performance Architect';
+const description = 'Dr. Noah St. John releases the Invisible Brake for buyers searching for succession coaching. 28 years. $3 billion in client results. The Neural Performance Architect, available worldwide.';
+const canonical = 'https://succession.noahstjohn.com';
+
+// Show first 12 topics on homepage. Niche grid links go to /succession-coaching/[niche] (atomic).
+const featuredTopics = topics.slice(0, 12);
+
+// Group niches by category for display on homepage.
+const nichesByCategory = nicheCategories.map(cat => ({
+  category: cat,
+  items: niches.filter(n => n.category === cat),
+}));
+---
+<Base title={title} description={description} canonical={canonical}>
+<style>
+:root{--gold:#B8952A;--gold-light:#D4AF50;--gold-pale:#F7F1DF;--black:#1A1A1A;--charcoal:#2D2D2D;--mid:#555;--light:#888;--rule:#E0D5C0;--bg:#FAFAF7;--white:#FFFFFF}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--black);font-family:'DM Sans',sans-serif;font-size:17px;line-height:1.8;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+
+.nav{background:var(--white);border-bottom:2px solid var(--gold);position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-brand{text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--black);letter-spacing:-.01em}
+.nav-tag{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);font-weight:600}
+@media(max-width:600px){.nav-tag{display:none}}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-link{font-size:13px;color:var(--mid);text-decoration:none;padding:6px 12px;font-weight:500}
+@media(max-width:700px){.nav-link{display:none}}
+.btn-nav{font-size:13px;font-weight:700;color:var(--white);background:var(--gold);text-decoration:none;padding:8px 18px;letter-spacing:.05em;text-transform:uppercase;transition:background .2s;white-space:nowrap;display:inline-block}
+.btn-nav:hover{background:var(--black);color:var(--white)}
+
+.hero{background:var(--white);border-bottom:1px solid var(--rule);padding:80px 24px 72px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--gold),var(--gold-light),var(--gold))}
+.hero-eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:20px}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,6vw,68px);font-weight:700;line-height:1.06;color:var(--black);letter-spacing:-.02em;margin-bottom:22px}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:clamp(16px,2vw,20px);color:var(--mid);max-width:680px;margin:0 auto 16px;line-height:1.7}
+.hero-stats{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin:24px 0 36px}
+.hero-stat-num{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--black);line-height:1;display:block}
+.hero-stat-lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--light);display:block;margin-top:2px}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-primary{display:inline-block;background:var(--gold);color:var(--white);text-decoration:none;font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:18px 44px;transition:background .2s,transform .15s;white-space:nowrap}
+.btn-primary:hover{background:var(--black);transform:translateY(-1px)}
+.btn-secondary{display:inline-block;border:2px solid var(--gold);color:var(--gold);text-decoration:none;font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:16px 36px;transition:all .2s;white-space:nowrap}
+.btn-secondary:hover{background:var(--gold);color:var(--white)}
+@media(max-width:480px){.btn-primary{font-size:11px;padding:14px 20px;letter-spacing:.04em}.btn-secondary{font-size:11px;padding:12px 18px;letter-spacing:.04em}}
+.hero-note{font-size:13px;color:var(--light);font-style:italic;margin-top:16px}
+
+.page-wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+.content-section{padding:56px 0;border-bottom:1px solid var(--rule)}
+.section-label{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:14px}
+h2{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,3.5vw,38px);font-weight:700;line-height:1.15;color:var(--black);margin-bottom:22px;letter-spacing:-.01em}
+h2 em{font-style:italic;color:var(--gold)}
+p{color:var(--charcoal);line-height:1.82;margin-bottom:18px}
+p:last-child{margin-bottom:0}
+
+.topic-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:24px}
+@media(max-width:720px){.topic-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.topic-grid{grid-template-columns:1fr}}
+.topic-card{background:var(--white);padding:22px 24px;text-decoration:none;display:flex;flex-direction:column;gap:4px;transition:background .15s}
+.topic-card:hover{background:var(--gold-pale)}
+.topic-card-name{font-size:15px;font-weight:600;color:var(--black);line-height:1.3}
+.topic-card-cta{font-size:13px;color:var(--gold);font-weight:600}
+
+.niche-section-inner{margin-top:24px}
+.niche-category{margin-bottom:28px}
+.niche-category-label{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--black);font-weight:700;border-bottom:2px solid var(--gold-pale);padding-bottom:6px;margin-bottom:12px}
+.niche-links{display:flex;flex-wrap:wrap;gap:8px}
+.niche-link{font-size:14px;color:var(--mid);text-decoration:none;padding:6px 14px;border:1px solid var(--rule);background:var(--white);transition:all .15s;line-height:1}
+.niche-link:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-pale)}
+
+.testi-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
+@media(max-width:580px){.testi-grid{grid-template-columns:1fr}}
+.testi-card{background:var(--white);border:1px solid var(--rule);border-top:3px solid var(--gold);padding:24px 20px 20px}
+.testi-stars{color:var(--gold);font-size:12px;letter-spacing:3px;margin-bottom:12px}
+.testi-quote{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--charcoal);line-height:1.65;margin-bottom:14px}
+.testi-name{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--black);margin-bottom:2px}
+.testi-title{font-size:12px;color:var(--light)}
+
+.cta-section{background:var(--white);border-top:3px solid var(--gold);padding:68px 40px;text-align:center}
+.cta-section h2{font-size:clamp(26px,4vw,42px);margin-bottom:14px}
+.cta-sub{font-size:17px;color:var(--mid);max-width:500px;margin:0 auto 36px;line-height:1.7}
+.cta-url{font-size:13px;color:var(--light);margin-top:10px;display:block}
+.cta-divider{display:flex;align-items:center;gap:16px;margin:36px 0 0}
+.cta-divider::before,.cta-divider::after{content:'';flex:1;height:1px;background:var(--rule)}
+.cta-divider span{color:var(--gold)}
+.cta-signoff{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--light);margin-top:22px}
+
+.footer-results{background:var(--black);border-top:3px solid var(--gold);padding:52px 0 44px;text-align:center}
+.footer-results-label{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:28px}
+.footer-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;max-width:800px;margin:0 auto 36px;padding:0 24px}
+@media(max-width:600px){.footer-stats{grid-template-columns:repeat(2,1fr)}}
+.footer-stat-num{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--white);line-height:1}
+.footer-stat-label{font-size:12px;color:rgba(255,255,255,.5);margin-top:6px}
+.footer-results-cta{display:inline-block;background:var(--gold);color:var(--white);text-decoration:none;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:18px 44px;transition:background .2s;white-space:nowrap}
+.footer-results-cta:hover{background:var(--white);color:var(--black)}
+@media(max-width:480px){.footer-results-cta{font-size:11px;padding:14px 20px;letter-spacing:.04em}}
+
+.site-footer{background:var(--white);border-top:1px solid var(--rule);padding:52px 0 0}
+.footer-main{max-width:1200px;margin:0 auto;padding:0 24px 40px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;border-bottom:1px solid var(--rule)}
+@media(max-width:800px){.footer-main{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.footer-main{grid-template-columns:1fr}}
+.footer-brand-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--black);margin-bottom:6px}
+.footer-brand-tag{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:14px}
+.footer-brand-desc{font-size:14px;color:var(--mid);line-height:1.7}
+.footer-col-label{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700;border-bottom:2px solid var(--gold-pale);padding-bottom:8px;margin-bottom:14px}
+.footer-col-links{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px}
+.footer-col-links a{font-size:14px;color:var(--mid);text-decoration:none}
+.footer-col-links a:hover{color:var(--gold)}
+.footer-signoff-wrap{background:var(--gold-pale);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:20px 24px;text-align:center}
+.footer-signoff{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--mid);line-height:1.6}
+.footer-bottom{max-width:1200px;margin:0 auto;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-copy,.footer-bottom-links{font-size:13px;color:var(--light)}
+.footer-bottom-links a{color:var(--gold);text-decoration:none;font-weight:600}
+.footer-bottom-links a:hover{color:var(--black)}
+@media(max-width:600px){.cta-section{padding:52px 22px}}
+</style>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="https://noahstjohn.com" class="nav-brand">
+      <span class="nav-name">Dr. Noah St. John</span>
+      <span class="nav-tag">Neural Performance Architect</span>
+    </a>
+    <div class="nav-links">
+      <a href="https://noahstjohn.com" class="nav-link">Home</a>
+      <a href="https://noahstjohn.com/consulting" class="nav-link">Consulting</a>
+      <a href="https://booknoah.com" class="nav-link">Speaking</a>
+      <a href="https://noahstjohn.com" class="btn-nav">Check Availability</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-eyebrow">The World's Leading Succession Coach and Family-Business Keynote Speaker</div>
+  <h1>The Succession Coach Who <em>Releases the Invisible Brake™</em></h1>
+  <p class="hero-sub">Dr. Noah St. John is known worldwide as The Neural Performance Architect. 28 years. 27 books. $3 billion in client results across 150+ countries. If you keep delaying the succession decision despite a clear plan, the Invisible Brake is the reason.</p>
+  <div class="hero-stats">
+    <div><span class="hero-stat-num">$3B+</span><span class="hero-stat-lbl">Client Results</span></div>
+    <div><span class="hero-stat-num">28</span><span class="hero-stat-lbl">Years Experience</span></div>
+    <div><span class="hero-stat-num">27</span><span class="hero-stat-lbl">Books Published</span></div>
+    <div><span class="hero-stat-num">150+</span><span class="hero-stat-lbl">Countries</span></div>
+  </div>
+  <div class="hero-btns">
+    <a href="https://noahstjohn.com" class="btn-primary">Check Availability at NoahStJohn.com</a>
+    <a href="https://noahstjohn.com/consulting" class="btn-secondary">Book the Invisible Brake Audit</a>
+  </div>
+  <p class="hero-note">Endorsed by Gary Vaynerchuk, Jack Canfield, Stephen Covey and Hal Elrod</p>
+</header>
+
+<div class="page-wrap">
+
+  <section class="content-section">
+    <div class="section-label">What Brings You Here</div>
+    <h2>The Invisible Brake is costing you in <em>every one of these.</em></h2>
+    <div class="topic-grid">
+      {featuredTopics.map(t => (
+        <a href={`/${t.slug}`} class="topic-card">
+          <span class="topic-card-name">{t.label}</span>
+          <span class="topic-card-cta">Release the Brake &rarr;</span>
+        </a>
+      ))}
+    </div>
+    <p style="font-size:13px;color:var(--light);margin-top:14px;text-align:center;">Showing 12 of 25 Succession formats. Every format available at its own URL.</p>
+  </section>
+
+  <section class="content-section">
+    <div class="section-label">Real Results</div>
+    <h2>What happens when you release <em>the Invisible Brake.</em></h2>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testi-quote">"Coaching with Dr. Noah St. John was worth more to me than my four-year degree from a major university. Highly recommended."</p>
+        <div class="testi-name">Pat B.</div>
+        <div class="testi-title">9-Figure CEO</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testi-quote">"My company went from being stuck at $4M to over $20M in sales because of coaching with Noah St. John. Noah was indispensable to our growth."</p>
+        <div class="testi-name">Adam S.</div>
+        <div class="testi-title">SaaS Founder</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testi-quote">"I've known Noah for a long time and he always provides massive value to his audience!"</p>
+        <div class="testi-name">Gary Vaynerchuk</div>
+        <div class="testi-title">CEO, VaynerMedia</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="testi-quote">"Noah St. John's work is about discovering within ourselves what we should have known all along: we are truly powerful beings with unlimited potential."</p>
+        <div class="testi-name">Stephen Covey</div>
+        <div class="testi-title">Author, The 7 Habits of Highly Effective People</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="section-label">Every Succession. Every Buyer.</div>
+    <h2>Succession Coaching, <em>Every Audience</em></h2>
+    <p>The Invisible Brake shows up differently for every founder, family-business owner, and pre-exit CEO. Select your audience below.</p>
+    <div class="niche-section-inner">
+      {nichesByCategory.map(group => (
+        <div class="niche-category">
+          <div class="niche-category-label">{group.category}</div>
+          <div class="niche-links">
+            {group.items.map(n => (
+              <a href={`/succession-coaching/${n.slug}`} class="niche-link">{n.label}</a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+</div>
+
+<div class="cta-section">
+  <div class="page-wrap" style="text-align:center">
+    <div class="section-label">Start Here</div>
+    <h2>Is the Invisible Brake <em>running your succession process?</em></h2>
+    <p class="cta-sub">Start with the Invisible Brake Audit and find out exactly where it is applied.</p>
+    <a href="https://noahstjohn.com/consulting" class="btn-primary">Book the Invisible Brake Audit</a>
+    <span class="cta-url">noahstjohn.com/consulting</span>
+    <div class="cta-divider"><span>&#9670;</span></div>
+    <p class="cta-signoff">"This is Dr. Noah St. John reminding you to ask better questions, release the brakes and accelerate your impact today."</p>
+  </div>
+</div>
+
+<div class="footer-results">
+  <div class="footer-results-label">The Results Speak For Themselves</div>
+  <div class="footer-stats">
+    <div><div class="footer-stat-num">$3B+</div><div class="footer-stat-label">Client Results</div></div>
+    <div><div class="footer-stat-num">1997</div><div class="footer-stat-label">Founded In</div></div>
+    <div><div class="footer-stat-num">27</div><div class="footer-stat-label">Books Published</div></div>
+    <div><div class="footer-stat-num">150+</div><div class="footer-stat-label">Countries</div></div>
+  </div>
+  <a href="https://noahstjohn.com" class="footer-results-cta">Check Availability at NoahStJohn.com</a>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-main">
+    <div>
+      <div class="footer-brand-name">Dr. Noah St. John</div>
+      <div class="footer-brand-tag">Neural Performance Architect</div>
+      <div class="footer-brand-desc">28 years. 27 books. $3 billion in client results. Author, speaker, and the world's leading authority on releasing the Invisible Brake for founders and family-business owners and corporate buyers.</div>
+    </div>
+    <div>
+      <div class="footer-col-label">Coaching</div>
+      <ul class="footer-col-links">
+        <li><a href="https://noahstjohn.com/consulting">Invisible Brake Audit</a></li>
+        <li><a href="https://noahstjohn.com">Private Coaching</a></li>
+        <li><a href="https://noahmentor.com">NoahMentor</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-label">Specialty</div>
+      <ul class="footer-col-links">
+        <li><a href="https://noahstjohn.com/legacy-protection">Legacy Protection</a></li>
+        <li><a href="https://noahstjohn.com/asset-protection">Asset Protection</a></li>
+        <li><a href="https://booknoah.com">Speaking</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-label">Connect</div>
+      <ul class="footer-col-links">
+        <li><a href="https://noahstjohn.com">NoahStJohn.com</a></li>
+        <li><a href="https://booknoah.com">BookNoah.com</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-signoff-wrap">
+    <div class="footer-signoff">"This is Dr. Noah St. John reminding you to ask better questions, release the brakes and accelerate your impact today."</div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">&copy; 2026 Dr. Noah St. John. All rights reserved.</span>
+    <span class="footer-bottom-links"><a href="https://noahstjohn.com">NoahStJohn.com</a> | <a href="https://booknoah.com">BookNoah.com</a></span>
+  </div>
+</footer>
+
+</Base>

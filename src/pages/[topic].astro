@@ -1,0 +1,32 @@
+---
+// src/pages/[topic].astro
+// SSR mode: Astro.params at runtime. Never getStaticPaths().
+// Routes by topic.template:
+//   "comparison" -> ComparisonTemplate (vs/longtail topics)
+//   default      -> PageTemplate (atomic best/coaching topics)
+import Base from '../layouts/Base.astro';
+import PageTemplate from '../components/PageTemplate.astro';
+import ComparisonTemplate from '../components/ComparisonTemplate.astro';
+import { topics } from '../data/topics.js';
+import { buildPageData } from '../lib/page-data.js';
+
+const BUYER_SINGULAR = 'transitioning founder';
+
+const { topic: topicSlug } = Astro.params;
+const topic = topics.find(t => t.slug === topicSlug);
+if (!topic) return Astro.redirect('/404');
+
+const { faq, faqSchema, aboutText } = buildPageData(topic, null, { buyerSingular: BUYER_SINGULAR });
+
+const title = `${topic.label} | Dr. Noah St. John | Neural Performance Architect`;
+const description = topic.desc;
+const canonical = `https://succession.noahstjohn.com/${topic.slug}`;
+
+const isComparison = topic.template === "comparison";
+---
+<Base title={title} description={description} canonical={canonical} faqSchema={faqSchema}>
+  {isComparison
+    ? <ComparisonTemplate topic={topic} faq={faq} aboutText={aboutText} buyerLabel={BUYER_SINGULAR} />
+    : <PageTemplate topic={topic} niche={null} faq={faq} aboutText={aboutText} />
+  }
+</Base>

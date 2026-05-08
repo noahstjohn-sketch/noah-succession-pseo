@@ -1,0 +1,46 @@
+name: IndexNow Submit
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  SITE_URL: https://succession.noahstjohn.com
+  INDEXNOW_KEY: eb9973f5d57036de504cd6933a685446
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Vercel deploy to finish
+        run: sleep 90
+
+      - name: Fetch sitemap and submit to IndexNow
+        run: |
+          HOST=$(echo "${SITE_URL}" | sed -E 's|https?://||; s|/.*||')
+
+          curl -sL "${SITE_URL}/sitemap-index.xml" \
+            | grep -oP '(?<=<loc>)[^<]+' \
+            | awk 'NR<=10000' > urls.txt
+
+          URL_COUNT=$(wc -l < urls.txt)
+          echo "Submitting ${URL_COUNT} URLs to IndexNow"
+
+          jq -n \
+            --arg host "$HOST" \
+            --arg key "$INDEXNOW_KEY" \
+            --arg keyLocation "${SITE_URL}/${INDEXNOW_KEY}.txt" \
+            --rawfile urls urls.txt \
+            '{
+              host: $host,
+              key: $key,
+              keyLocation: $keyLocation,
+              urlList: ($urls | split("\n") | map(select(length > 0)))
+            }' > payload.json
+
+          echo "Payload size: $(wc -c < payload.json) bytes"
+
+          curl -i -X POST "https://api.indexnow.org/IndexNow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            --data @payload.json
