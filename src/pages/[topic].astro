@@ -14,7 +14,7 @@ const BUYER_SINGULAR = 'transitioning founder';
 
 const { topic: topicSlug } = Astro.params;
 const topic = topics.find(t => t.slug === topicSlug);
-if (!topic) return Astro.redirect('/404');
+if (!topic) return new Response(null, { status: 404 });
 
 const { faq, faqSchema, aboutText } = buildPageData(topic, null, { buyerSingular: BUYER_SINGULAR });
 

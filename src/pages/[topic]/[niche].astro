@@ -14,8 +14,8 @@ const { topic: topicSlug, niche: nicheSlug } = Astro.params;
 const topic = topics.find(t => t.slug === topicSlug);
 const niche = niches.find(n => n.slug === nicheSlug);
 
-if (!topic || !niche) return Astro.redirect('/404');
-if (topic.kind !== 'atomic') return Astro.redirect('/404');
+if (!topic || !niche) return new Response(null, { status: 404 });
+if (topic.kind !== 'atomic') return new Response(null, { status: 404 });
 
 const { faq, faqSchema, aboutText } = buildPageData(topic, niche, { buyerSingular: BUYER_SINGULAR });
 
