@@ -15,8 +15,34 @@ const nichesByCategory = nicheCategories.map(cat => ({
   category: cat,
   items: niches.filter(n => n.category === cat),
 }));
+// AEO: ProfessionalService schema for the homepage.
+const offerSourceTopics = topics.filter(t => t.kind === 'atomic').slice(0, 5);
+const professionalServiceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'Dr. Noah St. John, Succession',
+  description: description,
+  url: canonical + '/',
+  logo: 'https://noahstjohn.com/logo.png',
+  serviceType: 'Executive coaching, leadership coaching, and keynote speaking',
+  provider: {
+    '@type': 'Person',
+    name: 'Dr. Noah St. John',
+    jobTitle: 'Neural Performance Architect',
+  },
+  areaServed: 'Worldwide',
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Succession Coaching and Speaking Services',
+    itemListElement: offerSourceTopics.map(t => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: t.label },
+    })),
+  },
+};
+const extraSchemas = [professionalServiceSchema];
 ---
-<Base title={title} description={description} canonical={canonical}>
+<Base title={title} description={description} canonical={canonical} extraSchemas={extraSchemas}>
 <style>
 :root{--gold:#B8952A;--gold-light:#D4AF50;--gold-pale:#F7F1DF;--black:#1A1A1A;--charcoal:#2D2D2D;--mid:#555;--light:#888;--rule:#E0D5C0;--bg:#FAFAF7;--white:#FFFFFF}
 *{margin:0;padding:0;box-sizing:border-box}

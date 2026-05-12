@@ -151,6 +151,10 @@ function buildFaqSchema(faq) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: [".faq-q", ".faq-a"],
+    },
     mainEntity: faq.map(item => ({
       "@type": "Question",
       name: item.q,

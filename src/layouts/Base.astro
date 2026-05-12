@@ -2,7 +2,7 @@
 // src/layouts/Base.astro
 // Authorized changes only: faqSchema JSON-LD, overflow-x:hidden on html+body, Person JSON-LD.
 // Button CSS lives in PageTemplate.astro and index.astro (scoped), NOT here.
-const { title, description, canonical, faqSchema } = Astro.props;
+const { title, description, canonical, faqSchema, extraSchemas, ogType } = Astro.props;
 
 const personSchema = {
   '@context': 'https://schema.org',
@@ -22,6 +22,46 @@ const personSchema = {
     'Succession Coaching'
   ],
 };
+
+const extras = Array.isArray(extraSchemas) ? extraSchemas.filter(Boolean) : [];
+
+const og = ogType || 'website';
+
+// Sitewide Review JSON-LD: 4 locked client and peer statements, verbatim.
+const reviewSchemas = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    reviewBody: "Coaching with Dr. Noah St. John was worth more to me than my four-year degree from a major university. Highly recommended.",
+    author: { '@type': 'Person', name: 'Pat B.', jobTitle: '9-Figure CEO' },
+    itemReviewed: { '@type': 'Person', name: 'Dr. Noah St. John', jobTitle: 'Neural Performance Architect' },
+    reviewRating: { '@type': 'Rating', ratingValue: 5, bestRating: 5 },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    reviewBody: "My company went from being stuck at $4M to over $20M in sales because of coaching with Noah St. John. Noah was indispensable to our growth.",
+    author: { '@type': 'Person', name: 'Adam S.', jobTitle: 'SaaS Founder' },
+    itemReviewed: { '@type': 'Person', name: 'Dr. Noah St. John', jobTitle: 'Neural Performance Architect' },
+    reviewRating: { '@type': 'Rating', ratingValue: 5, bestRating: 5 },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    reviewBody: "I've known Noah for a long time and he always provides massive value to his audience!",
+    author: { '@type': 'Person', name: 'Gary Vaynerchuk', jobTitle: 'CEO, VaynerMedia' },
+    itemReviewed: { '@type': 'Person', name: 'Dr. Noah St. John', jobTitle: 'Neural Performance Architect' },
+    reviewRating: { '@type': 'Rating', ratingValue: 5, bestRating: 5 },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    reviewBody: "Noah St. John's work is about discovering within ourselves what we should have known all along: we are truly powerful beings with unlimited potential.",
+    author: { '@type': 'Person', name: 'Stephen Covey', jobTitle: 'Author, The 7 Habits of Highly Effective People' },
+    itemReviewed: { '@type': 'Person', name: 'Dr. Noah St. John', jobTitle: 'Neural Performance Architect' },
+    reviewRating: { '@type': 'Rating', ratingValue: 5, bestRating: 5 },
+  },
+];
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -31,12 +71,23 @@ const personSchema = {
   <title>{title}</title>
   <meta name="description" content={description} />
   {canonical && <link rel="canonical" href={canonical} />}
+  <meta name="author" content="Dr. Noah St. John" />
+  <meta property="og:type" content={og} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  {canonical && <meta property="og:url" content={canonical} />}
+  <meta property="og:site_name" content="Dr. Noah St. John, Neural Performance Architect" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
   <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
   {faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+  {extras.map(s => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  {reviewSchemas.map(s => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
   <style is:global>
     /* Mobile horizontal scroll guard (must be on BOTH html and body) */
     html, body { overflow-x: hidden; }
