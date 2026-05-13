@@ -17,6 +17,25 @@ export async function GET() {
     }
   }
 
+    // CITY_ROUTES_INJECTED 2026-05-13
+  // Adds cities, city detail pages, and city x topic atomic pages.
+  // Pattern: replicates speaker.noahstjohn.com which pulls 38% of network impressions.
+  let citiesData;
+  try {
+    citiesData = (await import('../data/cities.js')).cities;
+  } catch (e) { citiesData = []; }
+  if (citiesData.length) {
+    urls.push(base + '/cities/');
+    for (const c of citiesData) {
+      urls.push(`${base}/cities/${c.slug}/`);
+      for (const topic of topics) {
+        if (topic.kind === 'atomic' || !topic.kind) {
+          urls.push(`${base}/cities/${c.slug}/${topic.slug}/`);
+        }
+      }
+    }
+  }
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(url => {

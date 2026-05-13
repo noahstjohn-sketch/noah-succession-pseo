@@ -1,0 +1,100 @@
+---
+import Base from '../../layouts/Base.astro';
+import { cities } from '../../data/cities.js';
+import { topics } from '../../data/topics.js';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  return cities.map(c => ({ params: { city: c.slug }, props: { city: c } }));
+}
+
+const { city } = Astro.props;
+const featuredTopics = topics.filter(t => !t.kind || t.kind === 'atomic').slice(0, 18);
+const otherCities = cities.filter(c => c.slug !== city.slug).slice(0, 16);
+
+const title = `Succession Coach in ${city.label} | Dr. Noah St. John`;
+const description = `Dr. Noah St. John is the Neural Performance Architect for transitioning founders in ${city.label} and across ${city.region}. 28 years, $3 billion in client results, 27 books in print.`;
+const canonical = `https://succession.noahstjohn.com/cities/${city.slug}/`;
+
+const faqItems = [
+  {
+    q: `What does a succession coach in ${city.label} actually deliver?`,
+    a: `Dr. Noah St. John works with transitioning founders in ${city.label} to diagnose and release the Invisible Brake™: the subconscious neural pattern that caps results regardless of strategy or capital. The work happens in private engagements (1:1 advisory) or facilitated leadership-team sessions. Most ${city.region} clients see measurable shifts in 30 to 90 days.`
+  },
+  {
+    q: `How does Dr. Noah St. John engage with transitioning founders in ${city.region}?`,
+    a: `Engagement models include the 12-Week Breakthrough Intensive (1:1 private work), executive offsites at your ${city.label} location, and corporate facilitation for leadership teams. International ${city.region} clients are accommodated in person or remotely. Start at noahstjohn.com/consulting to scope a fit conversation.`
+  },
+  {
+    q: `Who in ${city.label} typically engages Dr. Noah St. John?`,
+    a: `transitioning founders in ${city.region} who have hit a ceiling that strategy alone cannot break. Common pattern: high-performing operators who have already tried more capital, more hires, or more tactics without compounding the way they expected. The work moves the operator, not the playbook.`
+  },
+  {
+    q: `What is the typical investment for working with Dr. Noah St. John?`,
+    a: `Engagement investment varies by format. The 12-Week Breakthrough Intensive sits at $9,800 for transitioning founders ready for private work. Executive team facilitation and corporate engagements are scoped to the organization. Specific pricing is provided after a fit conversation; start at noahstjohn.com/consulting.`
+  },
+  {
+    q: `What makes Dr. Noah St. John different from other coaches available in ${city.label}?`,
+    a: `Three things: 28 years of focused research, $3 billion in documented client outcomes, and a methodology (Neural Performance Architecture™ + the Invisible Brake™) that targets the subconscious pattern rather than the surface behavior. Endorsed by Gary Vaynerchuk, Jack Canfield, and Stephen Covey. 27 books published by HarperCollins, Hay House, and Simon & Schuster.`
+  },
+  {
+    q: `How quickly do transitioning founders in ${city.label} see results?`,
+    a: `Most ${city.label} clients identify their personal Invisible Brake within the first two weeks of working with Dr. St. John. Release of the brake typically begins within the first 30 days. Measurable business outcomes compound over 60 to 180 days. Across the broader client base, the cumulative result has been over $3 billion in documented growth.`
+  },
+  {
+    q: `Is Dr. Noah St. John available for virtual engagements with ${city.label} clients?`,
+    a: `Yes. The 12-Week Breakthrough Intensive runs remotely or in person depending on client preference. Dr. St. John has worked with clients in over 150 countries. Whether your engagement is local to ${city.label}, regional across ${city.region}, or fully remote, the format adapts.`
+  }
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map(item => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a }
+  }))
+};
+---
+<Base title={title} description={description} canonical={canonical} faqSchema={faqSchema}>
+
+<section style="background: #FFFFFF; padding: 72px 24px 56px; border-bottom: 1px solid #E0D5C0;">
+  <div style="max-width: 980px; margin: 0 auto; text-align: center;">
+    <div style="font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #B8952A; font-weight: 700; margin-bottom: 20px;">Succession Coach in {city.label}</div>
+    <h1 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 5.5vw, 62px); font-weight: 700; line-height: 1.08; letter-spacing: -.02em; margin-bottom: 22px;">The Succession Coach<br><em style="font-style: italic; color: #B8952A;">{city.label}</em> Asks For.</h1>
+    <p style="font-size: clamp(16px, 2vw, 19px); color: #555; max-width: 720px; margin: 0 auto 32px; line-height: 1.7;">Dr. Noah St. John is the Neural Performance Architect. He works with transitioning founders in {city.label} and across {city.region}. 28 years, 27 books, $3 billion in documented client results.</p>
+    <a href="https://noahstjohn.com/consulting/" style="display: inline-block; background: #B8952A; color: #fff; text-decoration: none; font-weight: 700; padding: 16px 40px; letter-spacing: .08em; text-transform: uppercase; font-size: 13px;">Start at noahstjohn.com/consulting</a>
+  </div>
+</section>
+
+<section style="padding: 56px 24px;">
+  <div style="max-width: 780px; margin: 0 auto;">
+    <p style="font-size: 18px; line-height: 1.8; color: #2D2D2D;">The successions Dr. St. John works with in {city.label} share one thing in common: they have hit a ceiling that more capital, more hires, and more tactics cannot break. Whatever is capping their results is not on the spreadsheet. It is a neural pattern, and naming it precisely is the first step toward releasing it. <strong>That is the work.</strong></p>
+  </div>
+</section>
+
+<section style="background: #FAFAF7; padding: 56px 24px;">
+  <div style="max-width: 980px; margin: 0 auto;">
+    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; margin-bottom: 24px;">Featured Succession Topics</h2>
+    <ul style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; padding: 0; list-style: none;">
+      {featuredTopics.map(t => (
+        <li><a href={`/cities/${city.slug}/${t.slug}/`} style="color: #B8952A; text-decoration: none; font-weight: 600;">{t.label} in {city.label}</a></li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<section style="padding: 56px 24px;">
+  <div style="max-width: 980px; margin: 0 auto;">
+    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 28px; margin-bottom: 20px;">Other Cities</h2>
+    <ul style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px 16px; padding: 0; list-style: none;">
+      {otherCities.map(c => (
+        <li><a href={`/cities/${c.slug}/`} style="color: #1A1A1A; text-decoration: none;">{c.label}</a></li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+</Base>

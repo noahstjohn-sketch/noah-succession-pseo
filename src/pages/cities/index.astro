@@ -1,0 +1,86 @@
+---
+import Base from '../../layouts/Base.astro';
+import { cities } from '../../data/cities.js';
+import { topics } from '../../data/topics.js';
+
+const featuredTopics = topics.filter(t => !t.kind || t.kind === 'atomic').slice(0, 18);
+
+const regions = {};
+for (const c of cities) {
+  const g = c.group || 'Worldwide';
+  if (!regions[g]) regions[g] = [];
+  regions[g].push(c);
+}
+const orderedRegions = Object.keys(regions);
+
+const title = `Cities | Dr. Noah St. John, The Neural Performance Architect`;
+const description = `Dr. Noah St. John works with transitioning founders across major cities in the United States and worldwide. Browse cities served by region.`;
+const canonical = `https://succession.noahstjohn.com/cities/`;
+
+const faqItems = [
+  {
+    q: `Which cities does Dr. Noah St. John work in with transitioning founders?`,
+    a: `Dr. St. John works with transitioning founders in every major US business market and across 150+ countries. He delivers Neural Performance Architecture™ in person and remotely, so location is rarely a constraint for the engagement model.`
+  },
+  {
+    q: `Does Dr. Noah St. John work internationally?`,
+    a: `Yes. Dr. St. John has worked with clients in over 150 countries. He works with transitioning founders across Europe, Asia Pacific, the Middle East, Latin America, Canada, Australia, and the United Kingdom.`
+  },
+  {
+    q: `What if my city is not listed?`,
+    a: `Even if your specific city is not listed, Dr. St. John has likely worked with transitioning founders nearby. The featured cities represent his most common markets, but availability is global. Reach out at noahstjohn.com/consulting and the team will confirm fit.`
+  },
+  {
+    q: `How do I start with Dr. Noah St. John?`,
+    a: `Start at noahstjohn.com/consulting. The Invisible Brake™ Audit is the recommended entry point for transitioning founders who want to understand exactly which neural performance pattern is capping their current results.`
+  }
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map(item => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a }
+  }))
+};
+---
+<Base title={title} description={description} canonical={canonical} faqSchema={faqSchema}>
+
+<section style="padding: 56px 24px;">
+  <div style="max-width: 980px; margin: 0 auto;">
+    <h1 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 5vw, 56px); margin-bottom: 24px;">Succession Coaching <em>by City</em></h1>
+    <p style="font-size: 19px; line-height: 1.7; color: #444; max-width: 760px;">
+      Dr. Noah St. John works with transitioning founders in every major US business market and across 150+ countries. Browse cities below or jump straight to scheduling at <a href="https://noahstjohn.com/consulting/">noahstjohn.com/consulting</a>.
+    </p>
+  </div>
+</section>
+
+<section style="padding: 0 24px 72px;">
+  <div style="max-width: 980px; margin: 0 auto;">
+    {orderedRegions.map(region => (
+      <div style="margin-bottom: 48px;">
+        <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 28px; margin-bottom: 16px;">{region}</h2>
+        <ul style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px 16px; padding: 0; list-style: none;">
+          {regions[region].map(c => (
+            <li><a href={`/cities/${c.slug}/`} style="color: #1A1A1A; text-decoration: none; font-weight: 500;">{c.label}</a></li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>
+
+<section style="background: #FAFAF7; padding: 56px 24px;">
+  <div style="max-width: 980px; margin: 0 auto;">
+    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 28px; margin-bottom: 24px;">Featured Succession Topics</h2>
+    <ul style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; padding: 0; list-style: none;">
+      {featuredTopics.map(t => (
+        <li><a href={`/${t.slug}`} style="color: #B8952A; text-decoration: none; font-weight: 600;">{t.label}</a></li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+</Base>

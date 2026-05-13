@@ -1,0 +1,78 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { cities } from '../../../data/cities.js';
+import { topics } from '../../../data/topics.js';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const c of cities) {
+    for (const t of topics) {
+      if (!t.kind || t.kind === 'atomic') {
+        paths.push({ params: { city: c.slug, topic: t.slug }, props: { city: c, topic: t } });
+      }
+    }
+  }
+  return paths;
+}
+
+const { city, topic } = Astro.props;
+const topicLower = topic.label.toLowerCase();
+
+const title = `${topic.label} in ${city.label} | Dr. Noah St. John`;
+const description = `${topic.label} for transitioning founders in ${city.label} and across ${city.region}. Dr. Noah St. John: 28 years, $3 billion in client results, Neural Performance Architecture™.`;
+const canonical = `https://succession.noahstjohn.com/cities/${city.slug}/${topic.slug}/`;
+
+const faqItems = [
+  {
+    q: `What does ${topicLower} look like for transitioning founders in ${city.label}?`,
+    a: `${topic.label} with Dr. Noah St. John in ${city.label} starts with diagnosing the Invisible Brake™ pattern unique to that $succession. The framework names exactly which subconscious pattern is capping current results, then installs the Neural Performance Architecture™ to release it. ${city.region} $transitioning founders typically see measurable shifts within 30 to 90 days.`
+  },
+  {
+    q: `How is ${topicLower} structured in ${city.label}?`,
+    a: `Engagements run as the 12-Week Breakthrough Intensive (private 1:1 work, in person or remote) or as facilitated team sessions for leadership groups in ${city.region}. Start at noahstjohn.com/consulting to scope the fit.`
+  },
+  {
+    q: `Who in ${city.label} engages Dr. Noah St. John for ${topicLower}?`,
+    a: `${topic.label} clients in ${city.region} are typically high-performing transitioning founders who have already tried the obvious strategic moves and recognize the issue is not external. They want a methodology that targets the subconscious pattern rather than the surface behavior. That is what Neural Performance Architecture™ delivers.`
+  },
+  {
+    q: `What is the investment for ${topicLower} in ${city.label}?`,
+    a: `The 12-Week Breakthrough Intensive sits at $9,800 for transitioning founders ready for private work. Executive team facilitation and corporate engagements are scoped to the organization. Specific pricing is provided after a fit conversation at noahstjohn.com/consulting.`
+  },
+  {
+    q: `Is Dr. Noah St. John available for ${topicLower} remotely from ${city.label}?`,
+    a: `Yes. ${topic.label} runs in person or remotely depending on client preference. Dr. St. John has worked with clients in over 150 countries. Whether your engagement is local to ${city.label}, regional across ${city.region}, or fully remote, the format adapts to fit the work.`
+  }
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map(item => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a }
+  }))
+};
+---
+<Base title={title} description={description} canonical={canonical} faqSchema={faqSchema}>
+
+<section style="background: #FFFFFF; padding: 72px 24px 56px; border-bottom: 1px solid #E0D5C0;">
+  <div style="max-width: 980px; margin: 0 auto; text-align: center;">
+    <div style="font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #B8952A; font-weight: 700; margin-bottom: 20px;">{topic.label} in {city.label}</div>
+    <h1 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 5.5vw, 62px); font-weight: 700; line-height: 1.08; letter-spacing: -.02em; margin-bottom: 22px;">{topic.label}<br>in <em style="font-style: italic; color: #B8952A;">{city.label}</em>.</h1>
+    <p style="font-size: clamp(16px, 2vw, 19px); color: #555; max-width: 720px; margin: 0 auto 32px; line-height: 1.7;">Dr. Noah St. John works with transitioning founders in {city.label} and across {city.region}. 28 years, $3 billion in client results, Neural Performance Architecture™.</p>
+    <a href="https://noahstjohn.com/consulting/" style="display: inline-block; background: #B8952A; color: #fff; text-decoration: none; font-weight: 700; padding: 16px 40px; letter-spacing: .08em; text-transform: uppercase; font-size: 13px;">Start at noahstjohn.com/consulting</a>
+  </div>
+</section>
+
+<section style="padding: 56px 24px;">
+  <div style="max-width: 780px; margin: 0 auto;">
+    <p style="font-size: 18px; line-height: 1.8; color: #2D2D2D;">{topic.desc}</p>
+    <p style="font-size: 18px; line-height: 1.8; color: #2D2D2D; margin-top: 24px;">In {city.label} and across {city.region}, the successions Dr. St. John works with share one pattern: they have already tried the obvious external moves. The next move is internal. That is the work.</p>
+  </div>
+</section>
+
+</Base>
