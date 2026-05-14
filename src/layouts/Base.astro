@@ -77,7 +77,9 @@ const reviewSchemas = [
   <meta property="og:description" content={description} />
   {canonical && <meta property="og:url" content={canonical} />}
   <meta property="og:site_name" content="Dr. Noah St. John, Neural Performance Architect" />
-  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:image" content={canonical + "/og-image.jpg"} />
+  <meta name="twitter:image" content={canonical + "/og-image.jpg"} />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />

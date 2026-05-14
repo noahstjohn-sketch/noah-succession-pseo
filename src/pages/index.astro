@@ -23,7 +23,7 @@ const professionalServiceSchema = {
   name: 'Dr. Noah St. John, Succession',
   description: description,
   url: canonical + '/',
-  logo: 'https://noahstjohn.com/logo.png',
+  logo: 'https://succession.noahstjohn.com/logo.png',
   serviceType: 'Executive coaching, leadership coaching, and keynote speaking',
   provider: {
     '@type': 'Person',
@@ -40,7 +40,22 @@ const professionalServiceSchema = {
     })),
   },
 };
-const extraSchemas = [professionalServiceSchema];
+
+// AEO: Book schemas for Noah's published titles (canonical source: _brand_assets/books.json).
+const bookSchemas = [
+  { '@context': 'https://schema.org', '@type': 'Book', name: 'Power Habits: The New Science for Making Success Automatic', author: { '@type': 'Person', name: 'Dr. Noah St. John', url: 'https://noahstjohn.com' }, publisher: 'Sound Wisdom', datePublished: '2019', bookFormat: 'https://schema.org/Hardcover', inLanguage: 'en' },
+  { '@context': 'https://schema.org', '@type': 'Book', name: 'The Book of Afformations', author: { '@type': 'Person', name: 'Dr. Noah St. John', url: 'https://noahstjohn.com' }, publisher: 'Hay House', datePublished: '2013', bookFormat: 'https://schema.org/Paperback', inLanguage: 'en' },
+  { '@context': 'https://schema.org', '@type': 'Book', name: 'The Secret Code of Success', author: { '@type': 'Person', name: 'Dr. Noah St. John', url: 'https://noahstjohn.com' }, publisher: 'HarperCollins', datePublished: '2009', bookFormat: 'https://schema.org/Hardcover', inLanguage: 'en' },
+  { '@context': 'https://schema.org', '@type': 'Book', name: 'Get Rid of Your Head Trash About Money', author: { '@type': 'Person', name: 'Dr. Noah St. John', url: 'https://noahstjohn.com' }, publisher: 'Success Clinic International, LLC', datePublished: '2017', bookFormat: 'https://schema.org/Paperback', inLanguage: 'en' },
+  { '@context': 'https://schema.org', '@type': 'Book', name: 'Millionaire Afformations', author: { '@type': 'Person', name: 'Dr. Noah St. John', url: 'https://noahstjohn.com' }, publisher: 'Success Clinic International, LLC', datePublished: '2022', bookFormat: 'https://schema.org/Paperback', inLanguage: 'en' },
+  { '@context': 'https://schema.org', '@type': 'Book', name: 'The 7-Figure Life', author: { '@type': 'Person', name: 'Dr. Noah St. John', url: 'https://noahstjohn.com' }, publisher: 'Gildan', datePublished: '2023', bookFormat: 'https://schema.org/Paperback', inLanguage: 'en' },
+  { '@context': 'https://schema.org', '@type': 'Book', name: 'The 7-Figure Expert', author: { '@type': 'Person', name: 'Dr. Noah St. John', url: 'https://noahstjohn.com' }, publisher: 'Success Clinic International, LLC', datePublished: '2023', bookFormat: 'https://schema.org/Paperback', inLanguage: 'en' },
+  { '@context': 'https://schema.org', '@type': 'Book', name: 'The 7-Figure Chiropractor', author: { '@type': 'Person', name: 'Dr. Noah St. John', url: 'https://noahstjohn.com' }, publisher: 'Success Clinic International, LLC', datePublished: '2023', bookFormat: 'https://schema.org/Paperback', inLanguage: 'en' },
+  { '@context': 'https://schema.org', '@type': 'Book', name: 'The Power Habits of Unstoppable Self-Confidence', author: { '@type': 'Person', name: 'Dr. Noah St. John', url: 'https://noahstjohn.com' }, publisher: 'Gildan', datePublished: '2023', bookFormat: 'https://schema.org/Paperback', inLanguage: 'en' },
+  { '@context': 'https://schema.org', '@type': 'Book', name: 'The 7-Figure Machine', author: { '@type': 'Person', name: 'Dr. Noah St. John', url: 'https://noahstjohn.com' }, publisher: 'Gildan', datePublished: '2024', bookFormat: 'https://schema.org/Paperback', inLanguage: 'en' },
+  { '@context': 'https://schema.org', '@type': 'Book', name: 'I Ask Better Questions', author: { '@type': 'Person', name: 'Dr. Noah St. John', url: 'https://noahstjohn.com' }, publisher: 'Success Clinic International, LLC', datePublished: '2026', bookFormat: 'https://schema.org/Hardcover', inLanguage: 'en' },
+];
+const extraSchemas = [professionalServiceSchema, ...bookSchemas];
 ---
 <Base title={title} description={description} canonical={canonical} extraSchemas={extraSchemas}>
 <style>
